@@ -1,0 +1,120 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__230067015<Principal, UserRole__91647283>
+  };
+type Category__778532416 = {#desserts; #drinks; #mains; #starters};
+type Category__936342486 = {#desserts; #drinks; #mains; #starters};
+type Data__44217153<K, V> = {var count : Nat__227979830; kvs : [var ?(K, V)]};
+type DeliveryAddress__122133985 =
+  {city : Text; notes : Text; postcode : Text; street : Text};
+type DeliveryAddress__860299868 =
+  {city : Text; notes : Text; postcode : Text; street : Text};
+type DishId__107744484 = Nat;
+type DishId__256652867 = Nat;
+type Dish__381865152 =
+  {
+    available : Bool;
+    category : Category__936342486;
+    description : Text;
+    featured : Bool;
+    id : DishId__107744484;
+    imageUrl : Text;
+    name : Text;
+    price : Nat
+  };
+type Dish__397035081 =
+  {
+    available : Bool;
+    category : Category__778532416;
+    description : Text;
+    featured : Bool;
+    id : DishId__256652867;
+    imageUrl : Text;
+    name : Text;
+    price : Nat
+  };
+type Internal__283199666<K, V> =
+  {children : [var ?Node__204828119<K, V>]; data : Data__44217153<K, V>};
+type Leaf__598469445<K, V> = {data : Data__44217153<K, V>};
+type Map__230067015<K, V> = Map__405889023<K, V>;
+type Map__405889023<K, V> = Map__603270868<K, V>;
+type Map__603270868<K, V> =
+  {var root : Node__204828119<K, V>; var size : Nat__227979830};
+type Nat__227979830 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__861270690 =
+  {
+    accessControlState : AccessControlState__201339279;
+    dishes : Map__230067015<DishId__256652867, Dish__397035081>;
+    orders : Map__230067015<OrderId__443926333, Order__340934306>;
+    state : {var nextOrderId : Nat}
+  };
+type Node__204828119<K, V> =
+  {#internal : Internal__283199666<K, V>; #leaf : Leaf__598469445<K, V>};
+type OrderId__197865225 = Nat;
+type OrderId__443926333 = Nat;
+type OrderItem__221753421 =
+  {dishId : DishId__256652867; name : Text; quantity : Nat; unitPrice : Nat};
+type OrderItem__892573009 =
+  {dishId : DishId__107744484; name : Text; quantity : Nat; unitPrice : Nat};
+type OrderStatus__393009242 = {#cancelled; #confirmed; #delivered; #placed};
+type OrderStatus__455618802 = {#cancelled; #confirmed; #delivered; #placed};
+type Order__340934306 =
+  {
+    address : DeliveryAddress__122133985;
+    cardholderName : ?Text;
+    createdAt : Int;
+    customerName : Text;
+    deliveryFee : Nat;
+    id : OrderId__443926333;
+    items : [OrderItem__221753421];
+    paymentMethod : PaymentMethod__1033876740;
+    phone : Text;
+    reference : Text;
+    status : OrderStatus__455618802;
+    subtotal : Nat;
+    total : Nat
+  };
+type Order__890782335 =
+  {
+    address : DeliveryAddress__860299868;
+    cardholderName : ?Text;
+    createdAt : Timestamp__301639476;
+    customerName : Text;
+    deliveryFee : Nat;
+    id : OrderId__197865225;
+    items : [OrderItem__892573009];
+    paymentMethod : PaymentMethod__46913440;
+    phone : Text;
+    reference : Text;
+    status : OrderStatus__393009242;
+    subtotal : Nat;
+    total : Nat
+  };
+type PaymentMethod__1033876740 = {#card; #cash};
+type PaymentMethod__46913440 = {#card; #cash};
+type Timestamp__301639476 = Int;
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20260924_120000" : (_old : {}) -> NewActor__861270690
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__230067015<Principal, UserRole__91647283>
+    };
+  stable dishes :
+    {
+      var root : Node__204828119<DishId__107744484, Dish__381865152>;
+      var size : Nat__227979830
+    };
+  stable orders :
+    {
+      var root : Node__204828119<OrderId__197865225, Order__890782335>;
+      var size : Nat__227979830
+    };
+  stable state : {var nextOrderId : Nat}
+};

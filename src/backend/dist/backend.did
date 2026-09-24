@@ -1,0 +1,159 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UpdateOrderStatusError = 
+ variant {
+   invalidTransition: record {
+                        from: OrderStatus;
+                        to: OrderStatus;
+                      };
+   notFound: OrderId;
+   unauthorized;
+ };
+type Timestamp = int;
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type PlaceOrderError = 
+ variant {
+   dishUnavailable: DishId;
+   emptyCart;
+   missingAddress;
+   missingCardholderName;
+   missingCustomerName;
+   missingPhone;
+   unknownDish: DishId;
+ };
+type PaymentMethod = 
+ variant {
+   card;
+   cash;
+ };
+type OrderStatus = 
+ variant {
+   cancelled;
+   confirmed;
+   delivered;
+   placed;
+ };
+type OrderItem = 
+ record {
+   dishId: DishId;
+   name: text;
+   quantity: nat;
+   unitPrice: nat;
+ };
+type OrderId = nat;
+type Order = 
+ record {
+   address: DeliveryAddress;
+   cardholderName: opt text;
+   createdAt: Timestamp;
+   customerName: text;
+   deliveryFee: nat;
+   id: OrderId;
+   items: vec OrderItem;
+   paymentMethod: PaymentMethod;
+   phone: text;
+   reference: text;
+   status: OrderStatus;
+   subtotal: nat;
+   total: nat;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DishId = nat;
+type Dish = 
+ record {
+   available: bool;
+   category: Category;
+   description: text;
+   featured: bool;
+   id: DishId;
+   imageUrl: text;
+   name: text;
+   price: nat;
+ };
+type DeliveryAddress = 
+ record {
+   city: text;
+   notes: text;
+   postcode: text;
+   street: text;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type Category = 
+ variant {
+   desserts;
+   drinks;
+   mains;
+   starters;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  execute: (qJson: text) -> (Result) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDish: (id: DishId) -> (opt Dish) query;
+  isCallerAdmin: () -> (bool) query;
+  listDishes: () -> (vec Dish) query;
+  listOrders: () -> (vec Order) query;
+  placeOrder: (customerName: text, phone: text, address: DeliveryAddress,
+   items: vec OrderItem, paymentMethod: PaymentMethod, cardholderName:
+   opt text) -> (variant {
+                   err: PlaceOrderError;
+                   ok: Order;
+                 });
+  schema: () -> (text) query;
+  updateOrderStatus: (orderId: OrderId, newStatus: OrderStatus) ->
+   (variant {
+      err: UpdateOrderStatusError;
+      ok: Order;
+    });
+}

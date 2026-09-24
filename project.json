@@ -1,0 +1,19 @@
+{
+  "overview": "A restaurant ordering site with a protected admin dashboard for managing incoming orders.",
+  "features": [
+    "Browse the menu and place delivery orders with cash or card",
+    "Protected admin dashboard listing incoming orders newest-first",
+    "Confirm, mark delivered, or cancel orders",
+    "Filter and search orders by status, reference, or customer",
+    "Summary counts and total revenue at a glance"
+  ],
+  "category": "restaurant-ordering",
+  "tags": [
+    "restaurant",
+    "food",
+    "ordering",
+    "admin-dashboard",
+    "order-management"
+  ],
+  "last_updated": "2026-09-24T10:17:05.602Z"
+}
